@@ -3,7 +3,7 @@ import qs from "qs";
 
 /****** 创建axios实例 ******/
 const service = axios.create({
-  baseURL: 'http://192.168.123.129:7001', 
+  baseURL: 'http://127.0.0.1:7001', 
   timeout: 5000 // 请求超时时间
 });
 
