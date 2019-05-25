@@ -30,7 +30,7 @@ export function fileUpload(file,callback) {
   const image = new Image();
   Reader.readAsDataURL(imgfile);
   Reader.onload = function() {
-    console.log(this.result);
+    // console.log(this.result);
   };
   Reader.onerror = function() {};
   Reader.onloadend = function() {
@@ -68,7 +68,6 @@ export function fileUpload(file,callback) {
     // 图片压缩
     context.drawImage(image, 0, 0, targetWidth, targetHeight);
     const compressResult = canvas.toDataURL("image/png", 0.2); //base64 格式
-    console.info(compressResult, 777777);
     callback(compressResult)
   };
 }

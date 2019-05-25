@@ -2,18 +2,20 @@
   <mu-container class="singlechat">
     <div class="msgcontent">
       <div class="msgcontent-wrap" ref="msgcontent">
-        <Chatitem
-          :key="index"
-          v-for="(value,index) in receiveMsg"
-          :direction="value.from===fromUser?'row-reverse':'row'"
-        >
-          <span v-if="value.type==='image'">
-            <mu-paper class="msgimage" :z-depth="1">
-              <img :src="value.message">
-            </mu-paper>
-          </span>
-          <span v-else>{{value.message}}</span>
-        </Chatitem>
+        <mu-load-more @refresh="refresh" :refreshing="refreshing">
+          <Chatitem
+            :key="value._id"
+            v-for="value in receiveMsg"
+            :direction="value.from===fromUser?'row-reverse':'row'"
+          >
+            <span v-if="value.type==='image'">
+              <mu-paper class="msgimage" :z-depth="1">
+                <img :src="value.message">
+              </mu-paper>
+            </span>
+            <span v-else>{{value.message}}</span>
+          </Chatitem>
+        </mu-load-more>
       </div>
     </div>
     <div class="entry">
@@ -32,13 +34,7 @@
     <mu-container class="msg-iconset">
       <mu-button color="secondary" icon class="msg-album" style="margin:0 12px">
         <mu-icon value="collections" color="#757575" size="36"></mu-icon>
-        <input
-          class="msg-album-input"
-          type="file"
-          name="file"
-          accept="image/*"
-          @change="fileUpload"
-        >
+        <input class="msg-album-input" type="file" name="file" accept="image/*" @change="imgUpload">
       </mu-button>
       <mu-button color="secondary" icon class="msg-photo" style="margin:0 12px">
         <mu-icon value="photo_camera" color="#757575" size="36"></mu-icon>
@@ -48,7 +44,7 @@
           name="file"
           accept="image/*"
           capture="camera"
-          @change="fileUpload"
+          @change="imgUpload"
         >
         <!-- <input value='' accept="video/*" capture="user">  -->
       </mu-button>
@@ -57,16 +53,22 @@
 </template>
 <script>
 import Chatitem from "@/components/Chatitem";
+import { fileUpload } from "@/axios/util";
 export default {
   data: function() {
     return {
+      refreshing: false, //刷新状态
+      scrollbarStatus: 2, //0 不设置滚动条 1 置顶 2置底
+      wrapheight: null,
       msg: 123,
       userId: null,
       msgType: "text",
       sendmessage: null,
       receiveMsg: [],
       fromUser: this.$store.state.userInfo.username,
-      toUser: this.$route.params.userId
+      toUser: this.$route.params.userId,
+      number: 20, //每次获取historyMsg的长度
+      page: 1 //默认获取第一页
     };
   },
   // mounted() {
@@ -82,15 +84,10 @@ export default {
       status: 1,
       room: this.$data.toUser
     });
-    this.$socket.emit("historyMsg", {
-      from: this.$data.fromUser,
-      to: this.$data.toUser
-    });
+    this.getHistoryMsg(); //初始化消息
   },
   updated: function() {
-    console.info(44423323322);
-    const ref = this.$refs.msgcontent;
-    ref.scrollTop = ref.scrollHeight;
+    this.setScroll(this.$data.scrollbarStatus); //数据更新之后设置滚动条位置
   },
   beforeDestroy() {
     this.$socket.emit("registered", {
@@ -100,36 +97,70 @@ export default {
   },
   sockets: {
     message: function(data) {
-      console.log("ff", data);
       this.$data.msg = data;
     },
     historyMsg: function(msg) {
-      this.$data.receiveMsg = [...this.$data.receiveMsg, ...msg["message"]];
+      this.$data.refreshing = false; //刷新指示器消失
+      this.$data.receiveMsg = msg["message"];
     },
     registered: function(data) {
       console.log(data, 44);
     },
     singlechat: function(msg) {
-      console.log(34545344, msg);
       this.$data.receiveMsg = [...this.$data.receiveMsg, msg];
     }
   },
   methods: {
-    fileUpload: function(event) {
-      const imgfile = event.target.files[0];
-      const Reader = new FileReader();
+    getHistoryMsg() {
+      this.$socket.emit("historyMsg", {
+        from: this.$data.fromUser,
+        to: this.$data.toUser,
+        number: this.$data.number,
+        page: this.$data.page
+      });
+    },
+    refresh() {
+      this.$data.refreshing = true;
+      this.$data.scrollbarStatus = 0; //置部
+      this.$data.page = this.$data.page + 1;
+    },
+    setScroll(status) {
+      console.log(
+        999999999,
+        status,
+        this.$data.wrapheight,
+        this.$refs.msgcontent.scrollHeight
+      );
+      const ref = this.$refs.msgcontent;
+      const scrollHeight = ref.scrollHeight;
+      switch (status) {
+        case 0:
+          console.log();
+          ref.scrollTop =
+            this.$refs.msgcontent.scrollHeight - this.$data.wrapheight;
+          this.$data.wrapheight = this.$refs.msgcontent.scrollHeight;
+          break;
+        case 1:
+          ref.scrollTop = 0;
+          break;
+        case 2:
+          ref.scrollTop = ref.scrollHeight;
+          this.$data.wrapheight = this.$refs.msgcontent.scrollHeight;
+          break;
+        default:
+          break;
+      }
+    },
+    scrollIntoView() {
+      this.$refs.msgcontent.scrollIntoView;
+    },
+    imgUpload: async function(event) {
       const _this = this;
-      Reader.readAsDataURL(imgfile);
-      Reader.onload = function() {
-        console.log(this.result);
-      };
-      Reader.onerror = function() {};
-      Reader.onloadend = function() {
-        if (!this.error) {
-          _this.$data.sendmessage = this.result;
-          _this.sendMsg("image");
-        }
-      };
+      const imgfile = event.target.files[0];
+      fileUpload(imgfile, function(filemessage) {
+        _this.$data.sendmessage = filemessage;
+        _this.sendMsg("image");
+      });
     },
     clearMsg: function() {
       this.$data.sendmessage = "";
@@ -152,6 +183,7 @@ export default {
           message: Data
         });
         this.clearMsg();
+        this.$data.scrollbarStatus = 2; //置底部
       }
     },
     test: function() {
@@ -173,6 +205,11 @@ export default {
     sendGroupMsg: function() {
       const Data = this.$refs.groupmessage.value;
       this.$socket.emit("groupchat", { groupId: "10001", message: Data });
+    }
+  },
+  watch: {
+    page: function() {
+      this.getHistoryMsg();
     }
   }
 };
