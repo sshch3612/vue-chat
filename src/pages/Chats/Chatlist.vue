@@ -64,10 +64,10 @@ export default {
       // data.message;
     },
     singlechatOut: function(data) {
-      const { from, date, count, message,type } = data;
+      const { from, date, count, message, type } = data;
       this.$set(this.userlist, from, {
         ...this.$data.userlist[from],
-        type:type,
+        type: type,
         message: message,
         count: count,
         date: date
