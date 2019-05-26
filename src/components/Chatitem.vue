@@ -1,8 +1,9 @@
 
+import { userInfo } from 'os';
 <template>
   <div class="chatitem" :style="{'flex-direction':direction}">
     <div :class="['chat-avatar',direction==='row-reverse'?'chat-avatar-right':'chat-avatar-left']">
-      <mu-avatar size="42">
+      <mu-avatar size="42" @click="viewUserinfo">
         <img :src="avatar">
       </mu-avatar>
     </div>
@@ -28,6 +29,14 @@ export default {
       default: function() {
         return "https://upload.jianshu.io/users/upload_avatars/7072486/058e8c2c-2cf7-430b-b652-a223b7244c11";
       }
+    },
+    userinfo: {
+      type: String,
+    }
+  },
+  methods: {
+    viewUserinfo() {
+      this.$router.push({ path: `/addrbook/${this.$props.userinfo}` });
     }
   }
 };

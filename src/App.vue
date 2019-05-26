@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <mu-appbar style="width: 100%;" color="primary" v-if="topbar" v-model="topbar">
-      <mu-button icon slot="left" v-if="topbar.showreturn" @click="$router.go(-1)">
+      <mu-button icon slot="left" v-if="topbar.showreturn" @click="routeReturn">
         <mu-icon value="keyboard_arrow_left" size="34"></mu-icon>
       </mu-button>
       <div style="text-align:center">{{topbar.title}}</div>
-      <mu-menu slot="right" v-if='topbar.menu'>
+      <mu-menu slot="right" v-if="topbar.menu">
         <mu-button flat color="primary">
           <mu-icon value="add_circle_outline"></mu-icon>
         </mu-button>
@@ -52,6 +52,15 @@ export default {
   methods: {
     showHide: function() {
       this.show = !this.show;
+    },
+    routeReturn: function() {
+      const pathname = this.$route.name;
+      console.log(pathname,4444444);
+      if (pathname === "chatuser") {
+        this.$router.replace({ path: "/chatlist" });
+      } else {
+        this.$router.go(-1);
+      }
     }
   },
   watch: {

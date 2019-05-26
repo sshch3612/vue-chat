@@ -8,6 +8,7 @@
             v-for="value in receiveMsg"
             :direction="value.from===fromUser?'row-reverse':'row'"
             :avatar=" baseUrl+'userAvatar/'+value.from "
+            :userinfo="value.from"
           >
             <span v-if="value.type==='image'">
               <mu-paper class="msgimage" :z-depth="1">
