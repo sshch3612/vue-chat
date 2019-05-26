@@ -62,6 +62,8 @@ export default {
       });
       if (res.code === 200) {
         this.$data.userInfo = res.message;
+      } else {
+        this.$alert(res.message, null, { okLabel: "我知道了" });
       }
     },
     async addFriend() {

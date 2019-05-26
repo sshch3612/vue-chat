@@ -71,7 +71,7 @@ export default {
             //登陆成功之后，跳转到 chatlist页面
             this.$router.replace({ name: "chatlist", path: "/chatlist" });
           } else {
-            this.$toast.message(res.message);
+            this.$alert(res.message, null, { okLabel: "我知道了" });
           }
         }
       });
@@ -85,7 +85,7 @@ export default {
             method: "post",
             data: { ..._this.$data.validateForm }
           });
-          _this.$alert(res.message, null,{okLabel:'我知道了'});
+          _this.$alert(res.message, null, { okLabel: "我知道了" });
         }
       });
     }
@@ -104,7 +104,7 @@ export default {
 }
 .mu-demo-form {
   width: 100%;
-  padding-top:60px;
+  padding-top: 60px;
   max-width: 460px;
   position: absolute;
   top: 10%;
