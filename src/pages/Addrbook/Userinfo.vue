@@ -31,7 +31,7 @@ export default {
         url: "getUser",
         method: "post",
         headers: {
-          token: this.$store.state.token
+          token: localStorage.getItem('chat_token')
         },
         data: {
           touser: this.$route.params.userinfo
