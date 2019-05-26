@@ -3,9 +3,7 @@
   <div class="chatitem" :style="{'flex-direction':direction}">
     <div :class="['chat-avatar',direction==='row-reverse'?'chat-avatar-right':'chat-avatar-left']">
       <mu-avatar size="42">
-        <img
-          src="https://upload.jianshu.io/users/upload_avatars/7072486/058e8c2c-2cf7-430b-b652-a223b7244c11"
-        >
+        <img :src="avatar">
       </mu-avatar>
     </div>
     <div :class="['chat-msg',direction==='row-reverse'?'chat-msg-right':'chat-msg-left']">
@@ -23,6 +21,12 @@ export default {
       type: String,
       default: function() {
         return "row";
+      }
+    },
+    avatar: {
+      type: String,
+      default: function() {
+        return "https://upload.jianshu.io/users/upload_avatars/7072486/058e8c2c-2cf7-430b-b652-a223b7244c11";
       }
     }
   }

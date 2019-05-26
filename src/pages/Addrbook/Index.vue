@@ -5,7 +5,7 @@
         <mu-list-item avatar button :ripple="false" v-bind:to="'/addrbook/'+ value.username">
           <mu-list-item-action>
             <mu-avatar>
-              <mu-icon size="36" value=":mudocs-icon-custom-github"></mu-icon>
+              <img :src="baseUrl+'userAvatar/'+value.username">
             </mu-avatar>
           </mu-list-item-action>
           <mu-list-item-content>
@@ -22,7 +22,8 @@
 export default {
   data: function() {
     return {
-      friendsUser: [],
+      baseUrl: "http://127.0.0.1:7001/",
+      friendsUser: []
     };
   },
   created() {
@@ -34,7 +35,7 @@ export default {
     friendsUser: function(msg) {
       this.$data.friendsUser = msg.message;
     }
-  },
+  }
 };
 </script>
 <style lang="less" scoped>
