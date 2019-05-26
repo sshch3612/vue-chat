@@ -7,7 +7,6 @@ const Store = new Vuex.Store({
   state: {
     islogin: false,
     userInfo: {},
-    token: localStorage.getItem("chat_token")
   },
   getters: {
     userInfo(state) {

@@ -1,9 +1,10 @@
 import axios from "axios";
 import qs from "qs";
+import {baseURL } from  '@/config/config.default';
 
 /****** 创建axios实例 ******/
 const service = axios.create({
-  baseURL: 'http://127.0.0.1:7001', 
+  baseURL: baseURL, 
   timeout: 5000 // 请求超时时间
 });
 

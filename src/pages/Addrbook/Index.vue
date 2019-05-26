@@ -5,7 +5,7 @@
         <mu-list-item avatar button :ripple="false" v-bind:to="'/addrbook/'+ value.username">
           <mu-list-item-action>
             <mu-avatar>
-              <img :src="baseUrl+'userAvatar/'+value.username">
+              <img :src="baseURL+'userAvatar/'+value.username">
             </mu-avatar>
           </mu-list-item-action>
           <mu-list-item-content>
@@ -22,11 +22,11 @@
 export default {
   data: function() {
     return {
-      baseUrl: "http://127.0.0.1:7001/",
       friendsUser: []
     };
   },
   created() {
+    console.log(this.baseURL,5555);
     this.$socket.emit("friendsUser", {
       username: this.$store.state.userInfo["username"]
     });
