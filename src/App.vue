@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <mu-appbar style="width: 100%;" color="primary" v-if="topbar" v-model="topbar">
-      <mu-button icon slot="left" v-if='topbar.showreturn' @click="$router.go(-1)">
-        <mu-icon value="keyboard_arrow_left" size='34'></mu-icon>
+      <mu-button icon slot="left" v-if="topbar.showreturn" @click="$router.go(-1)">
+        <mu-icon value="keyboard_arrow_left" size="34"></mu-icon>
       </mu-button>
-      {{topbar.title}}
-      <mu-menu slot="right">
+      <div style="text-align:center">{{topbar.title}}</div>
+      <mu-menu slot="right" v-if='topbar.menu'>
         <mu-button flat color="primary">
           <mu-icon value="add_circle_outline"></mu-icon>
         </mu-button>
@@ -34,23 +34,15 @@ export default {
   name: "App",
   data() {
     return {
-      topbar: null,
-      bottomtab: null
+      topbar: this.$route.meta.topbar,
+      bottomtab: this.$route.meta.bottomtab
     };
   },
   components: {
     Bottomtab
   },
-  created() {
-    // this.$socket.emit("registered",{
-    //   userId: this.$data.fromUser,
-    //   status: this.$data.toUser
-    // });
-    console.log(3333333, this.$route.meta.topbar, 999999999);
-  },
   sockets: {
     connect: function(data) {
-      console.log(data, this.$store.getters.userInfo, 8227377777777);
       this.$socket.emit("registered", {
         userId: this.$store.getters.userInfo.username,
         status: 3
@@ -74,8 +66,6 @@ export default {
           this.$data.topbar = { title: to.params["userId"] };
         }
       }
-
-      console.info(this.$data.topbar, this.$data.bottomtab, 4444299988884444);
     }
   }
 };
