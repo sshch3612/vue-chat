@@ -8,17 +8,22 @@ import "../static/mobile_normalize.css";
 import MuseUI from "muse-ui";
 import Toast from "muse-ui-toast";
 import "muse-ui/dist/muse-ui.css";
+import "muse-ui-message/dist/muse-ui-message.css";
+import Message from "muse-ui-message";
 import store from "./store";
+import { baseURL } from "@/config/config.default";
 
+Vue.prototype.baseURL = baseURL;
 Vue.config.productionTip = false;
 
 Vue.use(MuseUI);
 Vue.use(Toast);
+Vue.use(Message);
 Vue.use(
   new VueSocketio({
     debug: true,
-    connection: "http://192.168.123.129:7001/",
-    
+    connection: baseURL
+
     // options: { path: "/" }
   })
 );
@@ -29,7 +34,7 @@ new Vue({
   router,
   store,
   components: { App },
-  template: "<App/>",
+  template: "<App/>"
   // sockets: {
   //   connect: function(data) {
   //   },

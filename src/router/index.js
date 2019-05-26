@@ -22,7 +22,8 @@ const router = new Router({
       meta: {
         bottomtab: true,
         topbar: {
-          title: "聊天"
+          title: "聊天",
+          menu:true,
         }
       }
     },
@@ -46,7 +47,27 @@ const router = new Router({
           showreturn:true
         }
       }
-      
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: Login,
+      meta: {
+        topbar: {
+          title:'登陆'
+        }
+      }
+    },
+    {
+      path: "/addfriend",
+      name: "addfriend",
+      component: Addfriend,
+      meta: {
+        topbar: {
+          showreturn:true,
+          title:'添加好友'
+        }
+      }
     },
     {
       path: "/addrbook",
@@ -55,7 +76,8 @@ const router = new Router({
       meta: {
         bottomtab: true,
         topbar: {
-          title: "通讯录"
+          title: "通讯录",
+          menu:true,
         }
       }
     },
@@ -70,16 +92,7 @@ const router = new Router({
       }
       
     },
-    {
-      path: "/addfriend",
-      name: "addfriend",
-      component: Addfriend
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: Login
-    }
+    
   ]
 });
 
