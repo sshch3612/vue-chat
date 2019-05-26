@@ -5,7 +5,7 @@
         <mu-list-item avatar button :ripple="false" v-bind:to="'/chatlist/'+ index">
           <mu-list-item-action>
             <mu-avatar>
-              <mu-icon size="36" value=":mudocs-icon-custom-github"></mu-icon>
+              <img :src="baseUrl+'userAvatar/'+value.username" alt="头像">
             </mu-avatar>
           </mu-list-item-action>
           <mu-list-item-content>
@@ -41,6 +41,7 @@ export default {
   // },
   data: function() {
     return {
+      baseUrl: "http://127.0.0.1:7001/",
       userlist: {}
     };
   },

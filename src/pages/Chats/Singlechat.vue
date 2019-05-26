@@ -7,6 +7,7 @@
             :key="value._id"
             v-for="value in receiveMsg"
             :direction="value.from===fromUser?'row-reverse':'row'"
+            :avatar=" baseUrl+'userAvatar/'+value.from "
           >
             <span v-if="value.type==='image'">
               <mu-paper class="msgimage" :z-depth="1">
@@ -53,10 +54,12 @@
 </template>
 <script>
 import Chatitem from "@/components/Chatitem";
+import Request from "@/axios/request";
 import { fileUpload } from "@/axios/util";
 export default {
   data: function() {
     return {
+      baseUrl: "http://127.0.0.1:7001/",
       refreshing: false, //刷新状态
       scrollbarStatus: 2, //0 不设置滚动条 1 置顶 2置底
       wrapheight: null,
@@ -84,6 +87,7 @@ export default {
       status: 1,
       room: this.$data.toUser
     });
+    // this.getUserinfo();
     this.getHistoryMsg(); //初始化消息
   },
   updated: function() {
@@ -111,6 +115,21 @@ export default {
     }
   },
   methods: {
+    async getUserinfo() {
+      const res = await Request({
+        url: "getUser",
+        method: "post",
+        headers: {
+          token: this.$store.state.token
+        },
+        data: {
+          touser: this.$route.params.userId
+        }
+      });
+      if (res.code === 200) {
+        this.$data.touserInfo = res.message;
+      }
+    },
     getHistoryMsg() {
       this.$socket.emit("historyMsg", {
         from: this.$data.fromUser,
