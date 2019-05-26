@@ -1,5 +1,5 @@
 # vue+muse-ui + 聊天页面
-
+# 预览地址 <http://hui.softasm.cn/chat/>
 > A Vue.js project
 
 ## Build Setup
