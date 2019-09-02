@@ -1,5 +1,6 @@
 # vue+muse-ui + 聊天页面
-# 预览地址 <http://hui.softasm.cn/chat/>
+# 预览地址 <http://hui.softasm.cn/chat/> 
+# ip访问 <http://114.116.42.125/chat/>
 > A Vue.js project
 
 ## Build Setup
