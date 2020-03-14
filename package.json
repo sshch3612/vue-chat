@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "acorn": "^6.1.1",
+    "acorn": "^5.7.4",
     "ast-types": "^0.12.2",
     "auto-textarea": "^1.4.0",
     "css-loader": "^0.28.11",
